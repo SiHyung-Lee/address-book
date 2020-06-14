@@ -1,12 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Card } from 'antd';
-
-const List = styled.div``;
-
-const Title = styled.strong``;
-
-const Content = styled.p``;
+import { List, Avatar } from 'antd';
 
 class Address extends React.Component {
     state = {
@@ -41,26 +35,23 @@ class Address extends React.Component {
     render() {
         const { people } = this.state;
         console.log(this.state);
-        return people.map((person, idx) => (
-            <Card key={idx} title='Default Card' style={{ width: 300 }}>
-                <List>
-                    <Title>name</Title>
-                    <Content>{person.name}</Content>
-                </List>
-                <List>
-                    <Title>telephone</Title>
-                    <Content>{person.telephone}</Content>
-                </List>
-                <List>
-                    <Title>email</Title>
-                    <Content>{person.email}</Content>
-                </List>
-                <List>
-                    <Title>address</Title>
-                    <Content>{person.address}</Content>
-                </List>
-            </Card>
-        ));
+        return (
+            <List
+                itemLayout='horizontal'
+                dataSource={people}
+                renderItem={(person) => (
+                    <List.Item>
+                        <List.Item.Meta
+                            avatar={
+                                <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
+                            }
+                            title={person.name}
+                            description='Ant Design, a design language for background applications, is refined by Ant UED Team'
+                        />
+                    </List.Item>
+                )}
+            />
+        );
     }
 }
 
