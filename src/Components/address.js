@@ -46,8 +46,10 @@ class Address extends React.Component {
                                 <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
                             }
                             title={person.name}
-                            description='Ant Design, a design language for background applications, is refined by Ant UED Team'
                         />
+                        <p>{person.telephone}</p>
+                        <p>{person.email}</p>
+                        <p>{person.address}</p>
                     </List.Item>
                 )}
             />
