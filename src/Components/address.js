@@ -1,7 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
-import { List, Avatar } from 'antd';
-
 class Address extends React.Component {
     state = {
         people: [
@@ -36,23 +33,28 @@ class Address extends React.Component {
         const { people } = this.state;
         console.log(this.state);
         return (
-            <List
-                itemLayout='horizontal'
-                dataSource={people}
-                renderItem={(person) => (
-                    <List.Item>
-                        <List.Item.Meta
-                            avatar={
-                                <Avatar src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' />
-                            }
-                            title={person.name}
-                        />
-                        <p>{person.telephone}</p>
-                        <p>{person.email}</p>
-                        <p>{person.address}</p>
-                    </List.Item>
-                )}
-            />
+            <>
+                <table className='uk-table uk-table-divider'>
+                    <thead>
+                        <tr>
+                            <th>이름</th>
+                            <th>연락처</th>
+                            <th>메일</th>
+                            <th>주소</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {people.map((person, idx) => (
+                            <tr key={idx}>
+                                <td>{person.name}</td>
+                                <td>{person.telephone}</td>
+                                <td>{person.email}</td>
+                                <td>{person.address}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </>
         );
     }
 }
