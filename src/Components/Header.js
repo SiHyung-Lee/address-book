@@ -1,49 +1,29 @@
 import React from 'react';
 import { BrowserRouter as Router, Link, Switch, Route } from 'react-router-dom';
-
-const Home = () => {
-    return <h2>Home</h2>;
-};
-
-const About = () => {
-    return <h2>About</h2>;
-};
-
-const Regi = () => {
-    return <h2>Regi</h2>;
-};
+import Home from '../Routes/Home';
+import Regi from '../Routes/Regi';
 
 class Header extends React.Component {
     render() {
         return (
             <Router>
-                <div>
-                    <nav>
-                        <ul>
+                <nav className='uk-navbar-container'>
+                    <div className='uk-navbar-left'>
+                        <ul className='uk-navbar-nav'>
                             <li>
-                                <Link to='/'>Home</Link>
+                                <Link to='/'>목록</Link>
                             </li>
                             <li>
-                                <Link to='/about'>About</Link>
-                            </li>
-                            <li>
-                                <Link to='/regi'>Regi</Link>
+                                <Link to='/regi'>등록</Link>
                             </li>
                         </ul>
-                    </nav>
+                    </div>
+                </nav>
 
-                    <Switch>
-                        <Route exact path='/'>
-                            <Home />
-                        </Route>
-                        <Route path='/about'>
-                            <About />
-                        </Route>
-                        <Route path='/regi'>
-                            <Regi />
-                        </Route>
-                    </Switch>
-                </div>
+                <Switch>
+                    <Route exact path='/' component={Home} />
+                    <Route path='/regi' component={Regi} />
+                </Switch>
             </Router>
         );
     }

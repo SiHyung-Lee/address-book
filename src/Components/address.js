@@ -31,7 +31,6 @@ class Address extends React.Component {
 
     render() {
         const { people } = this.state;
-        console.log(this.state);
         return (
             <>
                 <table className='uk-table uk-table-divider'>
