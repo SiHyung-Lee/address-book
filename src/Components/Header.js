@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Link, Switch, Route } from 'react-router-dom';
 import Home from '../Routes/Home';
-import Regi from '../Routes/Regi';
+import Enroll from '../Routes/Enroll';
 
 class Header extends React.Component {
     render() {
@@ -14,7 +14,7 @@ class Header extends React.Component {
                                 <Link to='/'>목록</Link>
                             </li>
                             <li>
-                                <Link to='/regi'>등록</Link>
+                                <Link to='/enroll'>등록</Link>
                             </li>
                         </ul>
                     </div>
@@ -22,7 +22,7 @@ class Header extends React.Component {
 
                 <Switch>
                     <Route exact path='/' component={Home} />
-                    <Route path='/regi' component={Regi} />
+                    <Route path='/enroll' component={Enroll} />
                 </Switch>
             </Router>
         );
