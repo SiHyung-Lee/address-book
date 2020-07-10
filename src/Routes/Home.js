@@ -1,7 +1,8 @@
 import React from 'react';
-import Address from '../Components/address';
+import Address from '../Components/Address';
 
-const Home = () => {
+const Home = (props) => {
+    console.log(props);
     return (
         <>
             <Address />

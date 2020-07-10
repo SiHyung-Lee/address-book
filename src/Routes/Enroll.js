@@ -3,7 +3,6 @@ import React from 'react';
 const Enroll = () => {
     return (
         <>
-            <h2>Enroll</h2>
             <ul className='uk-list uk-list-divider enroll-list'>
                 <li>
                     <strong className='uk-width-1-6'>이름</strong>
