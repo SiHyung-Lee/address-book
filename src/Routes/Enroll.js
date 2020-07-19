@@ -3,10 +3,10 @@ import React from 'react';
 class Enroll extends React.Component {
     state = {
         person: {
-            name: '',
-            telephone: '',
-            email: '',
-            address: '',
+            name: 'a',
+            telephone: 'b',
+            email: 'c',
+            address: 'd',
         },
         people: [
             {
@@ -36,12 +36,43 @@ class Enroll extends React.Component {
         ],
     };
 
-    handleChange = (event) => {
+    handleChangeName = (event) => {
         this.setState({
             person: {
                 name: event.target.value,
             },
         });
+    };
+
+    handleChangeTelephone = (event) => {
+        this.setState({
+            person: {
+                telephone: event.target.value,
+            },
+        });
+    };
+
+    handleChangeEmail = (event) => {
+        this.setState({
+            person: {
+                email: event.target.value,
+            },
+        });
+    };
+
+    handleChangeAddress = (event) => {
+        this.setState({
+            person: {
+                address: event.target.value,
+            },
+        });
+    };
+
+    handleSubmit = () => {
+        this.setState({
+            people: this.state.people.push(this.state.person),
+        });
+        console.log(this.state.people);
     };
 
     render() {
@@ -57,25 +88,38 @@ class Enroll extends React.Component {
                                 type='text'
                                 className='uk-width-1-2'
                                 value={person.name}
-                                onChange={this.handleChange}
+                                onChange={this.handleChangeName}
                             />
                         </li>
                         <li>
                             <strong className='uk-width-1-6'>연락처</strong>
-                            <input className='uk-width-1-2' />
+                            <input
+                                className='uk-width-1-2'
+                                value={person.telephone}
+                                onChange={this.handleChangeTelephone}
+                            />
                         </li>
                         <li>
                             <strong className='uk-width-1-6'>이메일</strong>
-                            <input className='uk-width-1-2' />
+                            <input
+                                className='uk-width-1-2'
+                                value={person.email}
+                                onChange={this.handleChangeEmail}
+                            />
                         </li>
                         <li>
                             <strong className='uk-width-1-6'>주소</strong>
-                            <input className='uk-width-1-2' />
+                            <input
+                                className='uk-width-1-2'
+                                value={person.address}
+                                onChange={this.handleChangeAddress}
+                            />
                         </li>
                     </ul>
                     <button
                         type='button'
-                        className='uk-button uk-button-default'>
+                        className='uk-button uk-button-default'
+                        onClick={this.handleSubmit}>
                         등록
                     </button>
                 </div>
