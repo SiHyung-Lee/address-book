@@ -70,14 +70,13 @@ class Enroll extends React.Component {
 
     handleSubmit = () => {
         this.setState({
-            people: this.state.people.push(this.state.person),
+            people: this.state.people.concat(this.state.person),
         });
-        console.log(this.state.people);
     };
 
     render() {
         const { person, people } = this.state;
-        console.log(person);
+        console.log(people);
         return (
             <>
                 <div>
