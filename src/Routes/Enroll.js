@@ -40,6 +40,9 @@ class Enroll extends React.Component {
         this.setState({
             person: {
                 name: event.target.value,
+                telephone: this.state.person.telephone,
+                email: this.state.person.email,
+                address: this.state.person.address,
             },
         });
     };
@@ -47,7 +50,10 @@ class Enroll extends React.Component {
     handleChangeTelephone = (event) => {
         this.setState({
             person: {
+                name: this.state.person.name,
                 telephone: event.target.value,
+                email: this.state.person.email,
+                address: this.state.person.address,
             },
         });
     };
@@ -55,7 +61,10 @@ class Enroll extends React.Component {
     handleChangeEmail = (event) => {
         this.setState({
             person: {
+                name: this.state.person.name,
+                telephone: this.state.person.telephone,
                 email: event.target.value,
+                address: this.state.person.address,
             },
         });
     };
@@ -63,6 +72,9 @@ class Enroll extends React.Component {
     handleChangeAddress = (event) => {
         this.setState({
             person: {
+                name: this.state.person.name,
+                telephone: this.state.person.telephone,
+                email: this.state.person.email,
                 address: event.target.value,
             },
         });
@@ -76,12 +88,21 @@ class Enroll extends React.Component {
 
     render() {
         const { person, people } = this.state;
-        console.log(people);
+        console.log(person);
         return (
             <>
                 <div>
                     <ul className='uk-list uk-list-divider enroll-list'>
                         <li>
+                            <strong className='uk-width-1-6'>이름</strong>
+                            <input
+                                type='text'
+                                className='uk-width-1-2'
+                                value={person.name}
+                                onChange={this.handleChangeName}
+                            />
+                        </li>
+                        {/* <li>
                             <strong className='uk-width-1-6'>이름</strong>
                             <input
                                 type='text'
@@ -113,7 +134,7 @@ class Enroll extends React.Component {
                                 value={person.address}
                                 onChange={this.handleChangeAddress}
                             />
-                        </li>
+                        </li> */}
                     </ul>
                     <button
                         type='button'
