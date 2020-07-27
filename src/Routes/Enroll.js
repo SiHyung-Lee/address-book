@@ -36,46 +36,26 @@ class Enroll extends React.Component {
         ],
     };
 
-    handleChangeName = (event) => {
+    handleChange = (event) => {
+        let val = event.target.value;
         this.setState({
             person: {
-                name: event.target.value,
-                telephone: this.state.person.telephone,
-                email: this.state.person.email,
-                address: this.state.person.address,
-            },
-        });
-    };
-
-    handleChangeTelephone = (event) => {
-        this.setState({
-            person: {
-                name: this.state.person.name,
-                telephone: event.target.value,
-                email: this.state.person.email,
-                address: this.state.person.address,
-            },
-        });
-    };
-
-    handleChangeEmail = (event) => {
-        this.setState({
-            person: {
-                name: this.state.person.name,
-                telephone: this.state.person.telephone,
-                email: event.target.value,
-                address: this.state.person.address,
-            },
-        });
-    };
-
-    handleChangeAddress = (event) => {
-        this.setState({
-            person: {
-                name: this.state.person.name,
-                telephone: this.state.person.telephone,
-                email: this.state.person.email,
-                address: event.target.value,
+                name:
+                    val && event.target.id === 'name'
+                        ? val
+                        : this.state.person.name,
+                telephone:
+                    val && event.target.id === 'telephone'
+                        ? val
+                        : this.state.person.telephone,
+                email:
+                    val && event.target.id === 'email'
+                        ? val
+                        : this.state.person.email,
+                address:
+                    val && event.target.id === 'address'
+                        ? val
+                        : this.state.person.address,
             },
         });
     };
@@ -93,15 +73,18 @@ class Enroll extends React.Component {
             <>
                 <div>
                     <ul className='uk-list uk-list-divider enroll-list'>
-                        <li>
-                            <strong className='uk-width-1-6'>이름</strong>
-                            <input
-                                type='text'
-                                className='uk-width-1-2'
-                                value={person.name}
-                                onChange={this.handleChangeName}
-                            />
-                        </li>
+                        {Object.keys(person).map((info, idx) => (
+                            <li key={idx}>
+                                <strong className='uk-width-1-6'>{info}</strong>
+                                <input
+                                    type='text'
+                                    className='uk-width-1-2'
+                                    id={info}
+                                    value={info.key}
+                                    onChange={this.handleChange}
+                                />
+                            </li>
+                        ))}
                         {/* <li>
                             <strong className='uk-width-1-6'>이름</strong>
                             <input
