@@ -66,16 +66,38 @@ class Enroll extends React.Component {
         });
     };
 
+    handleTitle = (info) => {
+        let title = '';
+        switch (info) {
+            case 'name':
+                title = '이름';
+                break;
+            case 'telephone':
+                title = '연락처';
+                break;
+            case 'email':
+                title = '이메일';
+                break;
+            case 'address':
+                title = '주소';
+                break;
+            default:
+                title = '';
+        }
+        return title;
+    };
+
     render() {
         const { person, people } = this.state;
-        console.log(person);
         return (
             <>
                 <div>
                     <ul className='uk-list uk-list-divider enroll-list'>
                         {Object.keys(person).map((info, idx) => (
                             <li key={idx}>
-                                <strong className='uk-width-1-6'>{info}</strong>
+                                <strong className='uk-width-1-6'>
+                                    {this.handleTitle(info)}
+                                </strong>
                                 <input
                                     type='text'
                                     className='uk-width-1-2'
@@ -85,39 +107,6 @@ class Enroll extends React.Component {
                                 />
                             </li>
                         ))}
-                        {/* <li>
-                            <strong className='uk-width-1-6'>이름</strong>
-                            <input
-                                type='text'
-                                className='uk-width-1-2'
-                                value={person.name}
-                                onChange={this.handleChangeName}
-                            />
-                        </li>
-                        <li>
-                            <strong className='uk-width-1-6'>연락처</strong>
-                            <input
-                                className='uk-width-1-2'
-                                value={person.telephone}
-                                onChange={this.handleChangeTelephone}
-                            />
-                        </li>
-                        <li>
-                            <strong className='uk-width-1-6'>이메일</strong>
-                            <input
-                                className='uk-width-1-2'
-                                value={person.email}
-                                onChange={this.handleChangeEmail}
-                            />
-                        </li>
-                        <li>
-                            <strong className='uk-width-1-6'>주소</strong>
-                            <input
-                                className='uk-width-1-2'
-                                value={person.address}
-                                onChange={this.handleChangeAddress}
-                            />
-                        </li> */}
                     </ul>
                     <button
                         type='button'
