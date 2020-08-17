@@ -40,22 +40,11 @@ class Enroll extends React.Component {
         let val = event.target.value;
         this.setState({
             person: {
-                name:
-                    val && event.target.id === 'name'
-                        ? val
-                        : this.state.person.name,
+                name: val && event.target.id === 'name' ? val : this.state.person.name,
                 telephone:
-                    val && event.target.id === 'telephone'
-                        ? val
-                        : this.state.person.telephone,
-                email:
-                    val && event.target.id === 'email'
-                        ? val
-                        : this.state.person.email,
-                address:
-                    val && event.target.id === 'address'
-                        ? val
-                        : this.state.person.address,
+                    val && event.target.id === 'telephone' ? val : this.state.person.telephone,
+                email: val && event.target.id === 'email' ? val : this.state.person.email,
+                address: val && event.target.id === 'address' ? val : this.state.person.address,
             },
         });
     };
@@ -67,7 +56,7 @@ class Enroll extends React.Component {
     };
 
     handleTitle = (info) => {
-        let title = '';
+        let title;
         switch (info) {
             case 'name':
                 title = '이름';
@@ -87,54 +76,96 @@ class Enroll extends React.Component {
         return title;
     };
 
+    handleModify = (idx) => {
+        this.setState({
+            people: [],
+        });
+    };
+
+    handleDelete = (idx) => {
+        this.setState({
+            people: [
+                ...this.state.people.slice(0, idx),
+                ...this.state.people.slice(idx + 1, this.state.people.length),
+            ],
+        });
+    };
+
     render() {
         const { person, people } = this.state;
+        console.log(people);
         return (
             <>
-                <div>
-                    <ul className='uk-list uk-list-divider enroll-list'>
+                <form className='enroll-form'>
+                    <fieldset className='uk-fieldset'>
+                        <legend className='uk-legend'>등록</legend>
                         {Object.keys(person).map((info, idx) => (
-                            <li key={idx}>
-                                <strong className='uk-width-1-6'>
-                                    {this.handleTitle(info)}
-                                </strong>
+                            <div className='uk-margin' key={idx}>
                                 <input
                                     type='text'
-                                    className='uk-width-1-2'
+                                    className='uk-input'
                                     id={info}
                                     value={info.key}
+                                    placeholder={this.handleTitle(info)}
                                     onChange={this.handleChange}
                                 />
-                            </li>
+                            </div>
                         ))}
-                    </ul>
-                    <button
-                        type='button'
-                        className='uk-button uk-button-default'
-                        onClick={this.handleSubmit}>
-                        등록
-                    </button>
-                </div>
-                <table className='uk-table uk-table-divider'>
-                    <thead>
-                        <tr>
-                            <th>이름</th>
-                            <th>연락처</th>
-                            <th>메일</th>
-                            <th>주소</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {people.map((person, idx) => (
-                            <tr key={idx}>
-                                <td>{person.name}</td>
-                                <td>{person.telephone}</td>
-                                <td>{person.email}</td>
-                                <td>{person.address}</td>
+                        <button
+                            type='button'
+                            className='uk-button uk-button-default uk-margin'
+                            onClick={this.handleSubmit}
+                        >
+                            등록
+                        </button>
+                    </fieldset>
+                </form>
+
+                <div className='enroll-list'>
+                    <table className='uk-table uk-table-divider'>
+                        <colgroup>
+                            <col width='10%' />
+                            <col width='15%' />
+                            <col width='25%' />
+                            <col width='' />
+                            <col width='20%' />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>이름</th>
+                                <th>연락처</th>
+                                <th>메일</th>
+                                <th colSpan='2'>주소</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {people.map((person, idx) => (
+                                <tr key={idx}>
+                                    <td>{person.name}</td>
+                                    <td>{person.telephone}</td>
+                                    <td>{person.email}</td>
+                                    <td>{person.address}</td>
+                                    <td>
+                                        <button
+                                            type='button'
+                                            className='uk-button uk-button-secondary uk-button-small uk-margin-small-right'
+                                            onClick={() => this.handleModify(idx)}
+                                        >
+                                            수정
+                                        </button>
+                                        <button
+                                            type='button'
+                                            className='uk-button uk-button-secondary uk-button-small'
+                                            onClick={() => this.handleDelete(idx)}
+                                        >
+                                            삭제
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </>
         );
     }

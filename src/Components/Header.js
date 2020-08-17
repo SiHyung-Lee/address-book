@@ -49,12 +49,7 @@ class Header extends React.Component {
                 </nav>
 
                 <Switch>
-                    <Route
-                        exact
-                        path='/'
-                        component={Home}
-                        people={this.state.people2}
-                    />
+                    <Route exact path='/' component={Home} people={this.state.people2} />
                     <Route path='/enroll' component={Enroll} />
                 </Switch>
             </Router>
