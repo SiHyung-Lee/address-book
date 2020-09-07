@@ -3,10 +3,10 @@ import React from 'react';
 class Enroll extends React.Component {
     state = {
         person: {
-            name: 'a',
-            telephone: 'b',
-            email: 'c',
-            address: 'd',
+            name: '',
+            telephone: '',
+            email: '',
+            address: '',
         },
         people: [
             {
@@ -49,8 +49,16 @@ class Enroll extends React.Component {
         });
     };
 
-    handleSubmit = () => {
+    handleSubmit = (e) => {
+        e.preventDefault();
+
         this.setState({
+            person: {
+                name: '',
+                telephone: '',
+                email: '',
+                address: '',
+            },
             people: this.state.people.concat(this.state.person),
         });
     };
@@ -77,9 +85,8 @@ class Enroll extends React.Component {
     };
 
     handleModify = (idx) => {
-        this.setState({
-            people: [],
-        });
+        let modifyPerson = this.state.people[idx];
+        console.log(modifyPerson);
     };
 
     handleDelete = (idx) => {
@@ -93,10 +100,9 @@ class Enroll extends React.Component {
 
     render() {
         const { person, people } = this.state;
-        console.log(people);
         return (
             <>
-                <form className='enroll-form'>
+                <form className='enroll-form' onSubmit={this.handleSubmit}>
                     <fieldset className='uk-fieldset'>
                         <legend className='uk-legend'>등록</legend>
                         {Object.keys(person).map((info, idx) => (
@@ -105,17 +111,14 @@ class Enroll extends React.Component {
                                     type='text'
                                     className='uk-input'
                                     id={info}
-                                    value={info.key}
+                                    value={this.state.person[info]}
                                     placeholder={this.handleTitle(info)}
                                     onChange={this.handleChange}
                                 />
+                                {console.log(info)}
                             </div>
                         ))}
-                        <button
-                            type='button'
-                            className='uk-button uk-button-default uk-margin'
-                            onClick={this.handleSubmit}
-                        >
+                        <button type='submit' className='uk-button uk-button-default uk-margin'>
                             등록
                         </button>
                     </fieldset>
