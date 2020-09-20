@@ -64,8 +64,8 @@ class Enroll extends React.Component {
             },
             people: this.switchModify
                 ? [
-                      ...this.state.people.slice(0, this.switchModifyIdx - 1),
-
+                      ...this.state.people.slice(0, this.switchModifyIdx),
+                      this.state.person,
                       ...this.state.people.slice(
                           this.switchModifyIdx + 1,
                           this.state.people.length
