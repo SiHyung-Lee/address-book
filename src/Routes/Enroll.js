@@ -36,6 +36,9 @@ class Enroll extends React.Component {
         ],
     };
 
+    switchModify = false;
+    switchModifyIdx = null;
+
     handleChange = (event) => {
         let val = event.target.value;
         this.setState({
@@ -59,8 +62,19 @@ class Enroll extends React.Component {
                 email: '',
                 address: '',
             },
-            people: this.state.people.concat(this.state.person),
+            people: this.switchModify
+                ? [
+                      ...this.state.people.slice(0, this.switchModifyIdx - 1),
+
+                      ...this.state.people.slice(
+                          this.switchModifyIdx + 1,
+                          this.state.people.length
+                      ),
+                  ]
+                : this.state.people.concat(this.state.person),
         });
+
+        this.switchModify = false;
     };
 
     handleTitle = (info) => {
@@ -86,7 +100,16 @@ class Enroll extends React.Component {
 
     handleModify = (idx) => {
         let modifyPerson = this.state.people[idx];
-        console.log(modifyPerson);
+        this.setState({
+            person: {
+                name: modifyPerson.name,
+                telephone: modifyPerson.telephone,
+                email: modifyPerson.email,
+                address: modifyPerson.address,
+            },
+        });
+        this.switchModify = true;
+        this.switchModifyIdx = idx;
     };
 
     handleDelete = (idx) => {
