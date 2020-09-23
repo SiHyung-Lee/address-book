@@ -138,7 +138,6 @@ class Enroll extends React.Component {
                                     placeholder={this.handleTitle(info)}
                                     onChange={this.handleChange}
                                 />
-                                {console.log(info)}
                             </div>
                         ))}
                         <button type='submit' className='uk-button uk-button-default uk-margin'>
