@@ -1,4 +1,5 @@
 import React from 'react';
+import { firestore } from '../firebase';
 
 class Enroll extends React.Component {
     state = {
@@ -8,33 +9,29 @@ class Enroll extends React.Component {
             email: '',
             address: '',
         },
-        people: [
-            {
-                name: '이시형',
-                telephone: '01047243923',
-                email: 'buzzcatfish@gmail.com',
-                address: '경기도 광명시 철산동',
-            },
-            {
-                name: '조상우',
-                telephone: '01012341234',
-                email: 'mail@naver.com',
-                address: '서울시 서초구 서초동',
-            },
-            {
-                name: '류보라',
-                telephone: '01056785678',
-                email: 'afdgg@yahoo.com',
-                address: '대구시 남구 대명동',
-            },
-            {
-                name: '송병욱',
-                telephone: '01035641286',
-                email: 'hre@daum.net',
-                address: '경기도 부천시 소사구 범박동',
-            },
-        ],
+        people: [],
     };
+
+    componentDidMount() {
+        firestore
+            .collection('address')
+            .get()
+            .then((docs) => {
+                docs.forEach((doc) => {
+                    const person = doc.data();
+                    this.setState({
+                        people: [
+                            {
+                                name: person.name,
+                                telephone: person.telephone,
+                                email: person.email,
+                                address: person.address,
+                            },
+                        ],
+                    });
+                });
+            });
+    }
 
     switchModify = false;
     switchModifyIdx = null;
