@@ -13,21 +13,21 @@ class Enroll extends React.Component {
     };
 
     componentDidMount() {
+        const people = [...this.state.people];
         firestore
             .collection('address')
             .get()
             .then((docs) => {
                 docs.forEach((doc) => {
                     const person = doc.data();
+                    people.push({
+                        name: person.name,
+                        telephone: person.telephone,
+                        email: person.email,
+                        address: person.address,
+                    });
                     this.setState({
-                        people: [
-                            {
-                                name: person.name,
-                                telephone: person.telephone,
-                                email: person.email,
-                                address: person.address,
-                            },
-                        ],
+                        people,
                     });
                 });
             });
@@ -52,7 +52,7 @@ class Enroll extends React.Component {
     handleSubmit = (e) => {
         e.preventDefault();
 
-        this.setState({
+        /*this.setState({
             person: {
                 name: '',
                 telephone: '',
@@ -69,7 +69,22 @@ class Enroll extends React.Component {
                       ),
                   ]
                 : this.state.people.concat(this.state.person),
-        });
+        });*/
+        firestore
+            .collection('address')
+            .add(this.state.person)
+            .then((r) => {
+                const address = [...this.state.people, this.state.person];
+                this.setState({
+                    people: address,
+                    person: {
+                        name: '',
+                        telephone: '',
+                        email: '',
+                        address: '',
+                    },
+                });
+            });
 
         this.switchModify = false;
     };
