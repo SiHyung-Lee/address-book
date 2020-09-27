@@ -21,6 +21,7 @@ class Enroll extends React.Component {
                 docs.forEach((doc) => {
                     const person = doc.data();
                     people.push({
+                        id: doc.id,
                         name: person.name,
                         telephone: person.telephone,
                         email: person.email,
@@ -73,11 +74,12 @@ class Enroll extends React.Component {
         firestore
             .collection('address')
             .add(this.state.person)
-            .then((r) => {
+            .then((doc) => {
                 const address = [...this.state.people, this.state.person];
                 this.setState({
                     people: address,
                     person: {
+                        id: '',
                         name: '',
                         telephone: '',
                         email: '',
@@ -110,8 +112,8 @@ class Enroll extends React.Component {
         return title;
     };
 
-    handleModify = (idx) => {
-        let modifyPerson = this.state.people[idx];
+    handleModify = (id) => {
+        let modifyPerson = this.state.people[id];
         this.setState({
             person: {
                 name: modifyPerson.name,
@@ -121,16 +123,25 @@ class Enroll extends React.Component {
             },
         });
         this.switchModify = true;
-        this.switchModifyIdx = idx;
+        this.switchModifyIdx = id;
     };
 
-    handleDelete = (idx) => {
-        this.setState({
+    handleDelete = (id) => {
+        firestore
+            .collection('address')
+            .doc(id)
+            .delete()
+            .then(() => {
+                const people = this.state.people.filter((person) => person.id !== id);
+                this.setState({ people });
+            });
+
+        /*this.setState({
             people: [
                 ...this.state.people.slice(0, idx),
                 ...this.state.people.slice(idx + 1, this.state.people.length),
             ],
-        });
+        });*/
     };
 
     render() {
@@ -176,8 +187,8 @@ class Enroll extends React.Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {people.map((person, idx) => (
-                                <tr key={idx}>
+                            {people.map((person) => (
+                                <tr key={person.id}>
                                     <td>{person.name}</td>
                                     <td>{person.telephone}</td>
                                     <td>{person.email}</td>
@@ -186,14 +197,14 @@ class Enroll extends React.Component {
                                         <button
                                             type='button'
                                             className='uk-button uk-button-secondary uk-button-small uk-margin-small-right'
-                                            onClick={() => this.handleModify(idx)}
+                                            onClick={() => this.handleModify(person.id)}
                                         >
                                             수정
                                         </button>
                                         <button
                                             type='button'
                                             className='uk-button uk-button-secondary uk-button-small'
-                                            onClick={() => this.handleDelete(idx)}
+                                            onClick={() => this.handleDelete(person.id)}
                                         >
                                             삭제
                                         </button>
