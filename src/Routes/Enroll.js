@@ -113,7 +113,28 @@ class Enroll extends React.Component {
     };
 
     handleModify = (id) => {
-        let modifyPerson = this.state.people[id];
+        console.log(id);
+        console.log(firestore.collection('address').doc(id));
+        console.log(this.state.people);
+
+        firestore
+            .collection('address')
+            .doc(id)
+            .get()
+            .then(() => {
+                const item = this.state.people.filter((person) => person.id === id);
+                console.log(item);
+                /*this.setState({
+                    person: {
+                        name: item.name,
+                        telephone: item.telephone,
+                        email: item.email,
+                        address: item.address,
+                    },
+                });*/
+            });
+
+        /*let modifyPerson = this.state.people[id];
         this.setState({
             person: {
                 name: modifyPerson.name,
@@ -121,12 +142,13 @@ class Enroll extends React.Component {
                 email: modifyPerson.email,
                 address: modifyPerson.address,
             },
-        });
+        });*/
         this.switchModify = true;
         this.switchModifyIdx = id;
     };
 
     handleDelete = (id) => {
+        console.log(firestore.collection('address').doc(id));
         firestore
             .collection('address')
             .doc(id)
