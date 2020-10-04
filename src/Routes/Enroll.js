@@ -4,6 +4,7 @@ import { firestore } from '../firebase';
 class Enroll extends React.Component {
     state = {
         person: {
+            id: '',
             name: '',
             telephone: '',
             email: '',
@@ -71,22 +72,32 @@ class Enroll extends React.Component {
                   ]
                 : this.state.people.concat(this.state.person),
         });*/
-        firestore
-            .collection('address')
-            .add(this.state.person)
-            .then((doc) => {
-                const address = [...this.state.people, this.state.person];
-                this.setState({
-                    people: address,
-                    person: {
-                        id: '',
-                        name: '',
-                        telephone: '',
-                        email: '',
-                        address: '',
-                    },
+        console.log(this.switchModify);
+        console.log(this.switchModifyIdx);
+        console.log(this.state.person);
+        //console.log(firestore.collection('address').doc(this.switchModifyIdx));
+        if (this.switchModify) {
+            console.log('bbbbb');
+            firestore.collection('address').doc(this.switchModifyIdx).update(this.state.person);
+        } else {
+            console.log('aaaaa');
+            firestore
+                .collection('address')
+                .add(this.state.person)
+                .then(() => {
+                    const address = [...this.state.people, this.state.person];
+                    this.setState({
+                        people: address,
+                        person: {
+                            id: '',
+                            name: '',
+                            telephone: '',
+                            email: '',
+                            address: '',
+                        },
+                    });
                 });
-            });
+        }
 
         this.switchModify = false;
     };
@@ -94,6 +105,9 @@ class Enroll extends React.Component {
     handleTitle = (info) => {
         let title;
         switch (info) {
+            case 'id':
+                title = 'ID';
+                break;
             case 'name':
                 title = '이름';
                 break;
@@ -113,25 +127,20 @@ class Enroll extends React.Component {
     };
 
     handleModify = (id) => {
-        console.log(id);
-        console.log(firestore.collection('address').doc(id));
-        console.log(this.state.people);
+        // console.log(id);
+        // console.log(firestore.collection('address').doc(id));
+        // console.log(this.state.people);
 
         firestore
             .collection('address')
             .doc(id)
             .get()
             .then(() => {
-                const item = this.state.people.filter((person) => person.id === id);
-                console.log(item);
-                /*this.setState({
-                    person: {
-                        name: item.name,
-                        telephone: item.telephone,
-                        email: item.email,
-                        address: item.address,
-                    },
-                });*/
+                const person = this.state.people.filter((person) => person.id === id)[0];
+                //console.log(person);
+                this.setState({
+                    person,
+                });
             });
 
         /*let modifyPerson = this.state.people[id];
@@ -148,7 +157,7 @@ class Enroll extends React.Component {
     };
 
     handleDelete = (id) => {
-        console.log(firestore.collection('address').doc(id));
+        //console.log(firestore.collection('address').doc(id));
         firestore
             .collection('address')
             .doc(id)
@@ -173,18 +182,22 @@ class Enroll extends React.Component {
                 <form className='enroll-form' onSubmit={this.handleSubmit}>
                     <fieldset className='uk-fieldset'>
                         <legend className='uk-legend'>등록</legend>
-                        {Object.keys(person).map((info, idx) => (
-                            <div className='uk-margin' key={idx}>
-                                <input
-                                    type='text'
-                                    className='uk-input'
-                                    id={info}
-                                    value={this.state.person[info]}
-                                    placeholder={this.handleTitle(info)}
-                                    onChange={this.handleChange}
-                                />
-                            </div>
-                        ))}
+                        {Object.keys(person).map((info, idx) =>
+                            info === 'id' ? (
+                                ''
+                            ) : (
+                                <div className='uk-margin' key={idx}>
+                                    <input
+                                        type='text'
+                                        className='uk-input'
+                                        id={info}
+                                        value={this.state.person[info]}
+                                        placeholder={this.handleTitle(info)}
+                                        onChange={this.handleChange}
+                                    />
+                                </div>
+                            )
+                        )}
                         <button type='submit' className='uk-button uk-button-default uk-margin'>
                             등록
                         </button>
