@@ -78,7 +78,13 @@ class Enroll extends React.Component {
         //console.log(firestore.collection('address').doc(this.switchModifyIdx));
         if (this.switchModify) {
             console.log('bbbbb');
-            firestore.collection('address').doc(this.switchModifyIdx).update(this.state.person);
+            firestore
+                .collection('address')
+                .doc(this.switchModifyIdx)
+                .update(this.state.person)
+                .then(() => {
+                    console.log('ggggggg');
+                });
         } else {
             console.log('aaaaa');
             firestore
