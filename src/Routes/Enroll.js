@@ -1,5 +1,6 @@
 import React from 'react';
 import { firestore } from '../firebase';
+import { Form, Input, Button, Table, Divider } from 'antd';
 
 class Enroll extends React.Component {
     state = {
@@ -11,6 +12,7 @@ class Enroll extends React.Component {
             address: '',
         },
         people: [],
+        formLayout: 'horizontal',
     };
 
     componentDidMount() {
@@ -63,6 +65,7 @@ class Enroll extends React.Component {
     };
 
     handleSubmit = (e) => {
+        console.log('submit');
         e.preventDefault();
 
         if (this.switchModify) {
@@ -137,35 +140,74 @@ class Enroll extends React.Component {
 
     render() {
         const { person, people } = this.state;
+
+        const { formLayout } = this.state;
+        const formItemLayout =
+            formLayout === 'horizontal'
+                ? {
+                      labelCol: { span: 4 },
+                      wrapperCol: { span: 14 },
+                  }
+                : null;
+        const buttonItemLayout =
+            formLayout === 'horizontal'
+                ? {
+                      wrapperCol: { span: 14, offset: 4 },
+                  }
+                : null;
+
+        const columns = [
+            {
+                title: 'Name',
+                dataIndex: 'name',
+            },
+            {
+                title: 'Cellphone',
+                dataIndex: 'cellphone',
+            },
+            {
+                title: 'Email',
+                dataIndex: 'email',
+            },
+            {
+                title: 'Address',
+                dataIndex: 'address',
+            },
+        ];
+
+        const rowSelection = {
+            onChange: (selectedRowKeys, selectedRows) => {
+                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+            },
+        };
+        {
+            console.log(people);
+        }
         return (
             <>
-                <form className='enroll-form' onSubmit={this.handleSubmit}>
-                    <fieldset className='uk-fieldset'>
-                        <legend className='uk-legend'>Registration</legend>
-                        {Object.keys(person).map((info, idx) =>
-                            info === 'id' ? (
-                                ''
-                            ) : (
-                                <div className='uk-margin' key={idx}>
-                                    <input
-                                        type='text'
-                                        className='uk-input'
-                                        id={info}
-                                        value={this.state.person[info]}
-                                        placeholder={this.handleTitle(info)}
-                                        onChange={this.handleChange}
-                                    />
-                                </div>
-                            )
-                        )}
-                        <button type='submit' className='uk-button uk-button-default uk-margin'>
+                <Form layout={formLayout}>
+                    {Object.keys(person).map((info, idx) =>
+                        info === 'id' ? (
+                            ''
+                        ) : (
+                            <Form.Item key={idx} label={this.handleTitle(info)} {...formItemLayout}>
+                                <Input
+                                    id={info}
+                                    value={this.state.person[info]}
+                                    onChange={this.handleChange}
+                                />
+                            </Form.Item>
+                        )
+                    )}
+                    <Form.Item {...buttonItemLayout}>
+                        <Button type='primary' onClick={this.handleSubmit}>
                             Submit
-                        </button>
-                    </fieldset>
-                </form>
-
+                        </Button>
+                    </Form.Item>
+                </Form>
+                <Table rowSelection={rowSelection} columns={columns} dataSource={people} />
                 <div className='enroll-list'>
-                    <table className='uk-table uk-table-divider'>
+                    {/*<table className='uk-table uk-table-divider'>
                         <colgroup>
                             <col width='10%' />
                             <col width='15%' />
@@ -189,25 +231,23 @@ class Enroll extends React.Component {
                                     <td>{person.email}</td>
                                     <td>{person.address}</td>
                                     <td>
-                                        <button
-                                            type='button'
-                                            className='uk-button uk-button-secondary uk-button-small uk-margin-small-right'
+                                        <Button
+                                            type='default'
                                             onClick={() => this.handleModify(person.id)}
                                         >
                                             Modify
-                                        </button>
-                                        <button
-                                            type='button'
-                                            className='uk-button uk-button-secondary uk-button-small'
+                                        </Button>
+                                        <Button
+                                            type='default'
                                             onClick={() => this.handleDelete(person.id)}
                                         >
                                             Delete
-                                        </button>
+                                        </Button>
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
-                    </table>
+                    </table>*/}
                 </div>
             </>
         );
