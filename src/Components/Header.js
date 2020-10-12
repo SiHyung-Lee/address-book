@@ -12,10 +12,10 @@ class Header extends React.Component {
                     <div className='uk-navbar-left'>
                         <ul className='uk-navbar-nav'>
                             <li>
-                                <Link to='/'>목록</Link>
+                                <Link to='/'>List</Link>
                             </li>
                             <li>
-                                <Link to='/enroll'>등록</Link>
+                                <Link to='/enroll'>Register</Link>
                             </li>
                         </ul>
                     </div>

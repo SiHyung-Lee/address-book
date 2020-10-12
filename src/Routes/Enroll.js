@@ -14,7 +14,14 @@ class Enroll extends React.Component {
     };
 
     componentDidMount() {
-        const people = [...this.state.people];
+        this.updateData();
+    }
+
+    switchModify = false;
+    switchModifyIdx = null;
+
+    updateData = () => {
+        const people = [];
         firestore
             .collection('address')
             .get()
@@ -29,14 +36,18 @@ class Enroll extends React.Component {
                         address: person.address,
                     });
                     this.setState({
+                        person: {
+                            id: '',
+                            name: '',
+                            telephone: '',
+                            email: '',
+                            address: '',
+                        },
                         people,
                     });
                 });
             });
-    }
-
-    switchModify = false;
-    switchModifyIdx = null;
+    };
 
     handleChange = (event) => {
         let val = event.target.value;
@@ -54,73 +65,20 @@ class Enroll extends React.Component {
     handleSubmit = (e) => {
         e.preventDefault();
 
-        /*this.setState({
-            person: {
-                name: '',
-                telephone: '',
-                email: '',
-                address: '',
-            },
-            people: this.switchModify
-                ? [
-                      ...this.state.people.slice(0, this.switchModifyIdx),
-                      this.state.person,
-                      ...this.state.people.slice(
-                          this.switchModifyIdx + 1,
-                          this.state.people.length
-                      ),
-                  ]
-                : this.state.people.concat(this.state.person),
-        });*/
-        console.log(this.switchModify);
-        console.log(this.switchModifyIdx);
-        console.log(this.state.person);
-        //console.log(firestore.collection('address').doc(this.switchModifyIdx));
         if (this.switchModify) {
-            console.log('bbbbb');
-
             firestore
                 .collection('address')
                 .doc(this.switchModifyIdx)
                 .update(this.state.person)
                 .then(() => {
-                    const people = [...this.state.people];
-                    firestore
-                        .collection('address')
-                        .get()
-                        .then((docs) => {
-                            docs.forEach((doc) => {
-                                const person = doc.data();
-                                people.push({
-                                    id: doc.id,
-                                    name: person.name,
-                                    telephone: person.telephone,
-                                    email: person.email,
-                                    address: person.address,
-                                });
-                                this.setState({
-                                    people,
-                                });
-                            });
-                        });
+                    this.updateData();
                 });
         } else {
-            console.log('aaaaa');
             firestore
                 .collection('address')
                 .add(this.state.person)
                 .then(() => {
-                    const address = [...this.state.people, this.state.person];
-                    this.setState({
-                        people: address,
-                        person: {
-                            id: '',
-                            name: '',
-                            telephone: '',
-                            email: '',
-                            address: '',
-                        },
-                    });
+                    this.updateData();
                 });
         }
 
@@ -152,37 +110,21 @@ class Enroll extends React.Component {
     };
 
     handleModify = (id) => {
-        // console.log(id);
-        // console.log(firestore.collection('address').doc(id));
-        // console.log(this.state.people);
-
         firestore
             .collection('address')
             .doc(id)
             .get()
             .then(() => {
                 const person = this.state.people.filter((person) => person.id === id)[0];
-                //console.log(person);
                 this.setState({
                     person,
                 });
             });
-
-        /*let modifyPerson = this.state.people[id];
-        this.setState({
-            person: {
-                name: modifyPerson.name,
-                telephone: modifyPerson.telephone,
-                email: modifyPerson.email,
-                address: modifyPerson.address,
-            },
-        });*/
         this.switchModify = true;
         this.switchModifyIdx = id;
     };
 
     handleDelete = (id) => {
-        //console.log(firestore.collection('address').doc(id));
         firestore
             .collection('address')
             .doc(id)
@@ -191,13 +133,6 @@ class Enroll extends React.Component {
                 const people = this.state.people.filter((person) => person.id !== id);
                 this.setState({ people });
             });
-
-        /*this.setState({
-            people: [
-                ...this.state.people.slice(0, idx),
-                ...this.state.people.slice(idx + 1, this.state.people.length),
-            ],
-        });*/
     };
 
     render() {
@@ -206,7 +141,7 @@ class Enroll extends React.Component {
             <>
                 <form className='enroll-form' onSubmit={this.handleSubmit}>
                     <fieldset className='uk-fieldset'>
-                        <legend className='uk-legend'>등록</legend>
+                        <legend className='uk-legend'>Registration</legend>
                         {Object.keys(person).map((info, idx) =>
                             info === 'id' ? (
                                 ''
@@ -224,7 +159,7 @@ class Enroll extends React.Component {
                             )
                         )}
                         <button type='submit' className='uk-button uk-button-default uk-margin'>
-                            등록
+                            Submit
                         </button>
                     </fieldset>
                 </form>
@@ -240,10 +175,10 @@ class Enroll extends React.Component {
                         </colgroup>
                         <thead>
                             <tr>
-                                <th>이름</th>
-                                <th>연락처</th>
-                                <th>메일</th>
-                                <th colSpan='2'>주소</th>
+                                <th>Name</th>
+                                <th>Cellphone</th>
+                                <th>Email</th>
+                                <th colSpan='2'>Address</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -259,14 +194,14 @@ class Enroll extends React.Component {
                                             className='uk-button uk-button-secondary uk-button-small uk-margin-small-right'
                                             onClick={() => this.handleModify(person.id)}
                                         >
-                                            수정
+                                            Modify
                                         </button>
                                         <button
                                             type='button'
                                             className='uk-button uk-button-secondary uk-button-small'
                                             onClick={() => this.handleDelete(person.id)}
                                         >
-                                            삭제
+                                            Delete
                                         </button>
                                     </td>
                                 </tr>
