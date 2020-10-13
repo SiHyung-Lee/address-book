@@ -1,6 +1,6 @@
 import React from 'react';
 import { firestore } from '../firebase';
-import { Form, Input, Button, Table, Divider } from 'antd';
+import { Form, Input, Button, Table } from 'antd';
 
 class Enroll extends React.Component {
     state = {
@@ -180,9 +180,7 @@ class Enroll extends React.Component {
                 console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
             },
         };
-        {
-            console.log(people);
-        }
+        
         return (
             <>
                 <Form layout={formLayout}>
