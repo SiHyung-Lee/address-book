@@ -9459,9 +9459,9 @@ rc-image@~3.2.1:
     rc-util "^5.0.6"
 
 rc-input-number@~6.1.0:
-  version "6.1.1"
-  resolved "https://registry.yarnpkg.com/rc-input-number/-/rc-input-number-6.1.1.tgz#818c426942d1b4dc4d6d2639d741ca67773a9118"
-  integrity sha512-9t2xf1G0YEism7FAXAvF1huBk7ZNABPBf6NL+3/aDL123WiT/vhhod4cldiDWTM1Yb2EDKR//ZIa546ScdsUaA==
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/rc-input-number/-/rc-input-number-6.1.0.tgz#bd11cd7ed2f8b60aa7b4ee8fc15158910acd2465"
+  integrity sha512-9JV9gbStukoM80yeqLG4su6uTsTOL/hJYdNZM2BT3szAkBqhclNRLkZdw9gIkaK6XTTJ8kZayIxjQpc4PPopAg==
   dependencies:
     "@babel/runtime" "^7.10.1"
     classnames "^2.2.5"
@@ -11388,11 +11388,6 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
-
-uikit@^3.5.4:
-  version "3.5.4"
-  resolved "https://registry.yarnpkg.com/uikit/-/uikit-3.5.4.tgz#3291abbf8e80114313ebf9ea3b30c628d751d345"
-  integrity sha512-5alqUOBUVrkbc/7NH/G3LB6iCHDaknA2ZFDa8FKh/s+ieexDGK6FLQQjxAvRTIO6EdL+/irBxe85+BKI1B8okw==
 
 unicode-canonical-property-names-ecmascript@^1.0.4:
   version "1.0.4"

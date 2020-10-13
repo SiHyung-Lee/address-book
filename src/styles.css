@@ -1,19 +1,1 @@
 @import '~antd/dist/antd.css';
-
-.enroll-form {
-    padding: 50px;
-}
-
-.enroll-form-title {
-    display: inline-block;
-}
-
-.enroll-form .uk-list {
-    margin-bottom: 50px;
-}
-.enroll-list {
-    padding: 50px;
-}
-.uk-button-small {
-    white-space: nowrap;
-}
