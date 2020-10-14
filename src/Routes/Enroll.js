@@ -2,10 +2,32 @@ import React from 'react';
 import { firestore } from '../firebase';
 import { Form, Input, Button, Table } from 'antd';
 
+const columns = [
+    {
+        title: 'Name',
+        dataIndex: 'name',
+        key: 'name',
+    },
+    {
+        title: 'Telephone',
+        dataIndex: 'telephone',
+        key: 'telephone',
+    },
+    {
+        title: 'Email',
+        dataIndex: 'email',
+        key: 'email',
+    },
+    {
+        title: 'Address',
+        dataIndex: 'address',
+        key: 'address',
+    },
+];
 class Enroll extends React.Component {
     state = {
         person: {
-            id: '',
+            key: '',
             name: '',
             telephone: '',
             email: '',
@@ -31,7 +53,7 @@ class Enroll extends React.Component {
                 docs.forEach((doc) => {
                     const person = doc.data();
                     people.push({
-                        id: doc.id,
+                        key: doc.id,
                         name: person.name,
                         telephone: person.telephone,
                         email: person.email,
@@ -39,7 +61,7 @@ class Enroll extends React.Component {
                     });
                     this.setState({
                         person: {
-                            id: '',
+                            key: '',
                             name: '',
                             telephone: '',
                             email: '',
@@ -155,15 +177,11 @@ class Enroll extends React.Component {
                   }
                 : null;
 
-        const { Column } = Table;
-
-        const data = people;
-        console.log(data);
         return (
             <>
                 <Form layout={formLayout}>
                     {Object.keys(person).map((info, idx) =>
-                        info === 'id' ? (
+                        info === 'key' ? (
                             ''
                         ) : (
                             <Form.Item key={idx} label={this.handleTitle(info)} {...formItemLayout}>
@@ -181,13 +199,7 @@ class Enroll extends React.Component {
                         </Button>
                     </Form.Item>
                 </Form>
-                <Table dataSource={data}>
-                    <Column title='Name' dataIndex='name' key='name' />
-                    <Column title='Telephone' dataIndex='telephone' key='telephone' />
-                    <Column title='Email' dataIndex='email' key='email' />
-                    <Column title='Address' dataIndex='address' key='address' />
-                </Table>
-
+                <Table dataSource={people} columns={columns} />
                 <div className='enroll-list'>
                     {/*<table className='uk-table uk-table-divider'>
                         <colgroup>
