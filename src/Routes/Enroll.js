@@ -65,7 +65,6 @@ class Enroll extends React.Component {
     };
 
     handleSubmit = (e) => {
-        console.log('submit');
         e.preventDefault();
 
         if (this.switchModify) {
@@ -156,31 +155,10 @@ class Enroll extends React.Component {
                   }
                 : null;
 
-        const columns = [
-            {
-                title: 'Name',
-                dataIndex: 'name',
-            },
-            {
-                title: 'Cellphone',
-                dataIndex: 'cellphone',
-            },
-            {
-                title: 'Email',
-                dataIndex: 'email',
-            },
-            {
-                title: 'Address',
-                dataIndex: 'address',
-            },
-        ];
+        const { Column } = Table;
 
-        const rowSelection = {
-            onChange: (selectedRowKeys, selectedRows) => {
-                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-            },
-        };
-        
+        const data = people;
+        console.log(data);
         return (
             <>
                 <Form layout={formLayout}>
@@ -203,7 +181,13 @@ class Enroll extends React.Component {
                         </Button>
                     </Form.Item>
                 </Form>
-                <Table rowSelection={rowSelection} columns={columns} dataSource={people} />
+                <Table dataSource={data}>
+                    <Column title='Name' dataIndex='name' key='name' />
+                    <Column title='Telephone' dataIndex='telephone' key='telephone' />
+                    <Column title='Email' dataIndex='email' key='email' />
+                    <Column title='Address' dataIndex='address' key='address' />
+                </Table>
+
                 <div className='enroll-list'>
                     {/*<table className='uk-table uk-table-divider'>
                         <colgroup>
