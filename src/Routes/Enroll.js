@@ -199,6 +199,7 @@ class Enroll extends React.Component {
                         </Button>
                     </Form.Item>
                 </Form>
+
                 <Table dataSource={people} columns={columns} />
                 <div className='enroll-list'>
                     {/*<table className='uk-table uk-table-divider'>
