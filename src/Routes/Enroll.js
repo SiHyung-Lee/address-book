@@ -24,6 +24,7 @@ const columns = [
         key: 'address',
     },
 ];
+
 class Enroll extends React.Component {
     state = {
         person: {
@@ -34,6 +35,7 @@ class Enroll extends React.Component {
             address: '',
         },
         people: [],
+        loading: true,
         formLayout: 'horizontal',
     };
 
@@ -44,9 +46,9 @@ class Enroll extends React.Component {
     switchModify = false;
     switchModifyIdx = null;
 
-    updateData = () => {
+    updateData = async () => {
         const people = [];
-        firestore
+        await firestore
             .collection('address')
             .get()
             .then((docs) => {
@@ -59,16 +61,17 @@ class Enroll extends React.Component {
                         email: person.email,
                         address: person.address,
                     });
-                    this.setState({
-                        person: {
-                            key: '',
-                            name: '',
-                            telephone: '',
-                            email: '',
-                            address: '',
-                        },
-                        people,
-                    });
+                });
+                this.setState({
+                    person: {
+                        key: '',
+                        name: '',
+                        telephone: '',
+                        email: '',
+                        address: '',
+                    },
+                    people,
+                    loading: false,
                 });
             });
     };
@@ -176,6 +179,7 @@ class Enroll extends React.Component {
                       wrapperCol: { span: 14, offset: 4 },
                   }
                 : null;
+        //console.log(people);
 
         return (
             <>
@@ -199,7 +203,6 @@ class Enroll extends React.Component {
                         </Button>
                     </Form.Item>
                 </Form>
-
                 <Table dataSource={people} columns={columns} />
                 <div className='enroll-list'>
                     {/*<table className='uk-table uk-table-divider'>
