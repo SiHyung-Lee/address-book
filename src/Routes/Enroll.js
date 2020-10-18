@@ -1,29 +1,6 @@
 import React from 'react';
 import { firestore } from '../firebase';
-import { Form, Input, Button, Table } from 'antd';
-
-const columns = [
-    {
-        title: 'Name',
-        dataIndex: 'name',
-        key: 'name',
-    },
-    {
-        title: 'Telephone',
-        dataIndex: 'telephone',
-        key: 'telephone',
-    },
-    {
-        title: 'Email',
-        dataIndex: 'email',
-        key: 'email',
-    },
-    {
-        title: 'Address',
-        dataIndex: 'address',
-        key: 'address',
-    },
-];
+import { Form, Input, Button, Table, Space } from 'antd';
 
 class Enroll extends React.Component {
     state = {
@@ -137,15 +114,18 @@ class Enroll extends React.Component {
     };
 
     handleModify = (id) => {
+        console.log(id);
         firestore
             .collection('address')
             .doc(id)
             .get()
             .then(() => {
+                console.log(this.state.people);
                 const person = this.state.people.filter((person) => person.id === id)[0];
                 this.setState({
                     person,
                 });
+                console.log(person);
             });
         this.switchModify = true;
         this.switchModifyIdx = id;
@@ -179,7 +159,8 @@ class Enroll extends React.Component {
                       wrapperCol: { span: 14, offset: 4 },
                   }
                 : null;
-        //console.log(people);
+
+        const { Column } = Table;
 
         return (
             <>
@@ -203,50 +184,27 @@ class Enroll extends React.Component {
                         </Button>
                     </Form.Item>
                 </Form>
-                <Table dataSource={people} columns={columns} />
-                <div className='enroll-list'>
-                    {/*<table className='uk-table uk-table-divider'>
-                        <colgroup>
-                            <col width='10%' />
-                            <col width='15%' />
-                            <col width='25%' />
-                            <col width='' />
-                            <col width='20%' />
-                        </colgroup>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Cellphone</th>
-                                <th>Email</th>
-                                <th colSpan='2'>Address</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {people.map((person) => (
-                                <tr key={person.id}>
-                                    <td>{person.name}</td>
-                                    <td>{person.telephone}</td>
-                                    <td>{person.email}</td>
-                                    <td>{person.address}</td>
-                                    <td>
-                                        <Button
-                                            type='default'
-                                            onClick={() => this.handleModify(person.id)}
-                                        >
-                                            Modify
-                                        </Button>
-                                        <Button
-                                            type='default'
-                                            onClick={() => this.handleDelete(person.id)}
-                                        >
-                                            Delete
-                                        </Button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>*/}
-                </div>
+                {/* <Table dataSource={people} columns={columns} /> */}
+                <Table dataSource={people}>
+                    <Column title='Name' dataIndex='name' key='name' />
+                    <Column title='Telephone' dataIndex='telephone' key='telephone' />
+                    <Column title='Email' dataIndex='email' key='email' />
+                    <Column title='Address' dataIndex='address' key='address' />
+                    <Column
+                        title='Action'
+                        key='action'
+                        render={(record) => (
+                            <Space size='middle'>
+                                <Button onClick={() => this.handleModify(record.key)}>
+                                    Modify
+                                </Button>
+                                <Button onClick={() => this.handleDelete(record.key)}>
+                                    Delete
+                                </Button>
+                            </Space>
+                        )}
+                    />
+                </Table>
             </>
         );
     }
