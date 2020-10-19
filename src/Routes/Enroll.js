@@ -12,7 +12,6 @@ class Enroll extends React.Component {
             address: '',
         },
         people: [],
-        loading: true,
         formLayout: 'horizontal',
     };
 
@@ -48,7 +47,6 @@ class Enroll extends React.Component {
                         address: '',
                     },
                     people,
-                    loading: false,
                 });
             });
     };
@@ -114,18 +112,15 @@ class Enroll extends React.Component {
     };
 
     handleModify = (id) => {
-        console.log(id);
         firestore
             .collection('address')
             .doc(id)
             .get()
             .then(() => {
-                console.log(this.state.people);
-                const person = this.state.people.filter((person) => person.id === id)[0];
+                const person = this.state.people.filter((person) => person.key === id)[0];
                 this.setState({
                     person,
                 });
-                console.log(person);
             });
         this.switchModify = true;
         this.switchModifyIdx = id;
@@ -137,7 +132,7 @@ class Enroll extends React.Component {
             .doc(id)
             .delete()
             .then(() => {
-                const people = this.state.people.filter((person) => person.id !== id);
+                const people = this.state.people.filter((person) => person.key !== id);
                 this.setState({ people });
             });
     };
@@ -184,7 +179,6 @@ class Enroll extends React.Component {
                         </Button>
                     </Form.Item>
                 </Form>
-                {/* <Table dataSource={people} columns={columns} /> */}
                 <Table dataSource={people}>
                     <Column title='Name' dataIndex='name' key='name' />
                     <Column title='Telephone' dataIndex='telephone' key='telephone' />
