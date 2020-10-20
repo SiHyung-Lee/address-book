@@ -1,6 +1,6 @@
 import React from 'react';
 import { firestore } from '../firebase';
-import { Form, Input, Button, Table, Space } from 'antd';
+import { Row, Col, Form, Input, Button, Table, Space } from 'antd';
 
 class Enroll extends React.Component {
     state = {
@@ -12,7 +12,6 @@ class Enroll extends React.Component {
             address: '',
         },
         people: [],
-        formLayout: 'horizontal',
     };
 
     componentDidMount() {
@@ -53,13 +52,17 @@ class Enroll extends React.Component {
 
     handleChange = (event) => {
         let val = event.target.value;
+        const id = event.target.id;
+        const { person } = this.state;
+        console.log(id);
+        console.log(val);
+
         this.setState({
             person: {
-                name: val && event.target.id === 'name' ? val : this.state.person.name,
-                telephone:
-                    val && event.target.id === 'telephone' ? val : this.state.person.telephone,
-                email: val && event.target.id === 'email' ? val : this.state.person.email,
-                address: val && event.target.id === 'address' ? val : this.state.person.address,
+                name: id === 'name' ? val : person.name,
+                telephone: id === 'telephone' ? val : person.telephone,
+                email: id === 'email' ? val : person.email,
+                address: id === 'address' ? val : person.address,
             },
         });
     };
@@ -139,19 +142,20 @@ class Enroll extends React.Component {
 
     render() {
         const { person, people } = this.state;
+        console.log(person);
 
-        const { formLayout } = this.state;
+        const formLayout = 'horizontal';
         const formItemLayout =
             formLayout === 'horizontal'
                 ? {
-                      labelCol: { span: 4 },
-                      wrapperCol: { span: 14 },
+                      labelCol: { span: 2 },
+                      wrapperCol: { span: 21 },
                   }
                 : null;
         const buttonItemLayout =
             formLayout === 'horizontal'
                 ? {
-                      wrapperCol: { span: 14, offset: 4 },
+                      wrapperCol: { span: 21, offset: 2 },
                   }
                 : null;
 
@@ -159,46 +163,58 @@ class Enroll extends React.Component {
 
         return (
             <>
-                <Form layout={formLayout}>
-                    {Object.keys(person).map((info, idx) =>
-                        info === 'key' ? (
-                            ''
-                        ) : (
-                            <Form.Item key={idx} label={this.handleTitle(info)} {...formItemLayout}>
-                                <Input
-                                    id={info}
-                                    value={this.state.person[info]}
-                                    onChange={this.handleChange}
-                                />
+                <Row justify='space-around' align='middle'>
+                    <Col span={22}>
+                        <Form layout={formLayout}>
+                            {Object.keys(person).map((info, idx) =>
+                                info === 'key' ? (
+                                    ''
+                                ) : (
+                                    <Form.Item
+                                        key={idx}
+                                        label={this.handleTitle(info)}
+                                        {...formItemLayout}
+                                    >
+                                        <Input
+                                            id={info}
+                                            value={this.state.person[info]}
+                                            onChange={this.handleChange}
+                                        />
+                                    </Form.Item>
+                                )
+                            )}
+                            <Form.Item {...buttonItemLayout}>
+                                <Button type='primary' onClick={this.handleSubmit}>
+                                    Submit
+                                </Button>
                             </Form.Item>
-                        )
-                    )}
-                    <Form.Item {...buttonItemLayout}>
-                        <Button type='primary' onClick={this.handleSubmit}>
-                            Submit
-                        </Button>
-                    </Form.Item>
-                </Form>
-                <Table dataSource={people}>
-                    <Column title='Name' dataIndex='name' key='name' />
-                    <Column title='Telephone' dataIndex='telephone' key='telephone' />
-                    <Column title='Email' dataIndex='email' key='email' />
-                    <Column title='Address' dataIndex='address' key='address' />
-                    <Column
-                        title='Action'
-                        key='action'
-                        render={(record) => (
-                            <Space size='middle'>
-                                <Button onClick={() => this.handleModify(record.key)}>
-                                    Modify
-                                </Button>
-                                <Button onClick={() => this.handleDelete(record.key)}>
-                                    Delete
-                                </Button>
-                            </Space>
-                        )}
-                    />
-                </Table>
+                        </Form>
+                    </Col>
+                </Row>
+                <Row justify='space-around' align='middle'>
+                    <Col span={22}>
+                        <Table dataSource={people}>
+                            <Column title='Name' dataIndex='name' key='name' />
+                            <Column title='Telephone' dataIndex='telephone' key='telephone' />
+                            <Column title='Email' dataIndex='email' key='email' />
+                            <Column title='Address' dataIndex='address' key='address' />
+                            <Column
+                                title='Action'
+                                key='action'
+                                render={(record) => (
+                                    <Space size='middle'>
+                                        <Button onClick={() => this.handleModify(record.key)}>
+                                            Modify
+                                        </Button>
+                                        <Button onClick={() => this.handleDelete(record.key)}>
+                                            Delete
+                                        </Button>
+                                    </Space>
+                                )}
+                            />
+                        </Table>
+                    </Col>
+                </Row>
             </>
         );
     }
