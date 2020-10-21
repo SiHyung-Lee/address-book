@@ -1,8 +1,8 @@
 import React from 'react';
-import Header from './Components/Header';
-import { firestore } from './firebase';
+import { firestore } from '../firebase';
+import { Row, Col, Form, Input, Button, Table, Space } from 'antd';
 
-class App extends React.Component {
+class Enroll extends React.Component {
     state = {
         person: {
             key: '',
@@ -142,12 +142,83 @@ class App extends React.Component {
     };
 
     render() {
+        const { person, people } = this.state;
+        console.log(person);
+
+        const formLayout = 'horizontal';
+        const formItemLayout =
+            formLayout === 'horizontal'
+                ? {
+                      labelCol: { span: 2 },
+                      wrapperCol: { span: 21 },
+                  }
+                : null;
+        const buttonItemLayout =
+            formLayout === 'horizontal'
+                ? {
+                      wrapperCol: { span: 21, offset: 2 },
+                  }
+                : null;
+
+        const { Column } = Table;
+
         return (
             <>
-                <Header />
+                <Row justify='space-around' align='middle'>
+                    <Col span={22}>
+                        <Form layout={formLayout}>
+                            {Object.keys(person).map((info, idx) =>
+                                info === 'key' ? (
+                                    ''
+                                ) : (
+                                    <Form.Item
+                                        key={idx}
+                                        label={this.handleTitle(info)}
+                                        {...formItemLayout}
+                                    >
+                                        <Input
+                                            id={info}
+                                            value={this.state.person[info]}
+                                            onChange={this.handleChange}
+                                        />
+                                    </Form.Item>
+                                )
+                            )}
+                            <Form.Item {...buttonItemLayout}>
+                                <Button type='primary' onClick={this.handleSubmit}>
+                                    Submit
+                                </Button>
+                            </Form.Item>
+                        </Form>
+                    </Col>
+                </Row>
+                <Row justify='space-around' align='middle'>
+                    <Col span={22}>
+                        <Table dataSource={people}>
+                            <Column title='Name' dataIndex='name' key='name' />
+                            <Column title='Telephone' dataIndex='telephone' key='telephone' />
+                            <Column title='Email' dataIndex='email' key='email' />
+                            <Column title='Address' dataIndex='address' key='address' />
+                            <Column
+                                title='Action'
+                                key='action'
+                                render={(record) => (
+                                    <Space size='middle'>
+                                        <Button onClick={() => this.handleModify(record.key)}>
+                                            Modify
+                                        </Button>
+                                        <Button onClick={() => this.handleDelete(record.key)}>
+                                            Delete
+                                        </Button>
+                                    </Space>
+                                )}
+                            />
+                        </Table>
+                    </Col>
+                </Row>
             </>
         );
     }
 }
 
-export default App;
+export default Enroll;
