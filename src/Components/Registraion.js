@@ -3,8 +3,8 @@ import { Row, Col, Form, Input, Button, Table, Space } from 'antd';
 
 class Registraion extends React.Component {
     render() {
+        console.log(this.props);
         const { person, people } = this.state;
-        console.log(person);
 
         const formLayout = 'horizontal';
         const formItemLayout =

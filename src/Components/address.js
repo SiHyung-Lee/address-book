@@ -3,6 +3,7 @@ import { Row, Col, Button, Table, Space } from 'antd';
 
 class Address extends React.Component {
     render() {
+        console.log(this.props);
         const { people } = this.state;
 
         const { Column } = Table;
