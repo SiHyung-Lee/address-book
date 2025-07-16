@@ -1,12 +1,12 @@
-import React from 'react';
-import Address from '../Components/address';
+import React from "react";
+import Address from "../Components/address";
 
 const Home = (props) => {
-    return (
-        <>
-            <Address />
-        </>
-    );
+  return (
+    <>
+      <Address />
+    </>
+  );
 };
 
 export default Home;
