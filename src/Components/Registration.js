@@ -1,15 +1,15 @@
-import React from 'react';
-import { firestore } from '../firebase';
-import { Row, Col, Form, Input, Button, Table } from 'antd';
+import React from "react";
+import { firestore } from "../firebase";
+import { Row, Col, Form, Input, Button, Table } from "antd";
 
-class Registraion extends React.Component {
+class Registration extends React.Component {
   state = {
     person: {
-      key: '',
-      name: '',
-      telephone: '',
-      email: '',
-      address: '',
+      key: "",
+      name: "",
+      telephone: "",
+      email: "",
+      address: "",
     },
     people: [],
   };
@@ -24,7 +24,7 @@ class Registraion extends React.Component {
   updateData = () => {
     const people = [];
     firestore
-      .collection('address')
+      .collection("address")
       .get()
       .then((docs) => {
         docs.forEach((doc) => {
@@ -39,11 +39,11 @@ class Registraion extends React.Component {
         });
         this.setState({
           person: {
-            key: '',
-            name: '',
-            telephone: '',
-            email: '',
-            address: '',
+            key: "",
+            name: "",
+            telephone: "",
+            email: "",
+            address: "",
           },
           people,
         });
@@ -57,11 +57,11 @@ class Registraion extends React.Component {
 
     this.setState({
       person: {
-        key: id === 'key' ? val : person.key,
-        name: id === 'name' ? val : person.name,
-        telephone: id === 'telephone' ? val : person.telephone,
-        email: id === 'email' ? val : person.email,
-        address: id === 'address' ? val : person.address,
+        key: id === "key" ? val : person.key,
+        name: id === "name" ? val : person.name,
+        telephone: id === "telephone" ? val : person.telephone,
+        email: id === "email" ? val : person.email,
+        address: id === "address" ? val : person.address,
       },
     });
   };
@@ -71,7 +71,7 @@ class Registraion extends React.Component {
 
     if (this.switchModify) {
       firestore
-        .collection('address')
+        .collection("address")
         .doc(this.switchModifyIdx)
         .update(this.state.person)
         .then(() => {
@@ -79,7 +79,7 @@ class Registraion extends React.Component {
         });
     } else {
       firestore
-        .collection('address')
+        .collection("address")
         .add(this.state.person)
         .then(() => {
           this.updateData();
@@ -92,30 +92,30 @@ class Registraion extends React.Component {
   handleTitle = (info) => {
     let title;
     switch (info) {
-      case 'id':
-        title = 'ID';
+      case "id":
+        title = "ID";
         break;
-      case 'name':
-        title = 'Name';
+      case "name":
+        title = "Name";
         break;
-      case 'telephone':
-        title = 'Telephone';
+      case "telephone":
+        title = "Telephone";
         break;
-      case 'email':
-        title = 'Email';
+      case "email":
+        title = "Email";
         break;
-      case 'address':
-        title = 'Address';
+      case "address":
+        title = "Address";
         break;
       default:
-        title = '';
+        title = "";
     }
     return title;
   };
 
   handleModify = (id) => {
     firestore
-      .collection('address')
+      .collection("address")
       .doc(id)
       .get()
       .then(() => {
@@ -130,7 +130,7 @@ class Registraion extends React.Component {
 
   handleDelete = (id) => {
     firestore
-      .collection('address')
+      .collection("address")
       .doc(id)
       .delete()
       .then(() => {
@@ -142,16 +142,16 @@ class Registraion extends React.Component {
   render() {
     const { person, people } = this.state;
 
-    const formLayout = 'horizontal';
+    const formLayout = "horizontal";
     const formItemLayout =
-      formLayout === 'horizontal'
+      formLayout === "horizontal"
         ? {
             labelCol: { span: 2 },
             wrapperCol: { span: 21 },
           }
         : null;
     const buttonItemLayout =
-      formLayout === 'horizontal'
+      formLayout === "horizontal"
         ? {
             wrapperCol: { span: 21, offset: 2 },
           }
@@ -161,12 +161,12 @@ class Registraion extends React.Component {
 
     return (
       <>
-        <Row justify='space-around' align='middle'>
+        <Row justify="space-around" align="middle">
           <Col span={22}>
             <Form layout={formLayout}>
               {Object.keys(person).map((info, idx) =>
-                info === 'key' ? (
-                  ''
+                info === "key" ? (
+                  ""
                 ) : (
                   <Form.Item key={idx} label={this.handleTitle(info)} {...formItemLayout}>
                     <Input id={info} value={this.state.person[info]} onChange={this.handleChange} />
@@ -174,7 +174,7 @@ class Registraion extends React.Component {
                 )
               )}
               <Form.Item {...buttonItemLayout}>
-                <Button type='primary' onClick={this.handleSubmit}>
+                <Button type="primary" onClick={this.handleSubmit}>
                   Submit
                 </Button>
               </Form.Item>
@@ -186,4 +186,4 @@ class Registraion extends React.Component {
   }
 }
 
-export default Registraion;
+export default Registration;
