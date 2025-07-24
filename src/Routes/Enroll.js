@@ -1,212 +1,161 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { firestore } from '../firebase';
-import { Row, Col, Form, Input, Button, Table, Space } from 'antd';
+import { Row, Col, Form, Input, Button, Table, Space, message, Spin } from 'antd';
+import useAddressData from '../hooks/useAddressData';
 
-class Enroll extends React.Component {
-  state = {
-    person: {
-      key: '',
-      name: '',
-      telephone: '',
-      email: '',
-      address: '',
-    },
-    people: [],
+const Enroll = () => {
+  const [form] = Form.useForm();
+  const { people, setPeople, loading, refetch } = useAddressData();
+  const [editingKey, setEditingKey] = useState(null);
+
+  const handleSubmit = async (values) => {
+    try {
+      if (editingKey) {
+        await firestore.collection('address').doc(editingKey).update(values);
+        message.success('Updated successfully');
+      } else {
+        await firestore.collection('address').add(values);
+        message.success('Added successfully');
+      }
+      form.resetFields();
+      setEditingKey(null);
+      refetch();
+    } catch (error) {
+      console.error('Error submitting:', error);
+      message.error('Failed to submit');
+    }
   };
 
-  componentDidMount() {
-    this.updateData();
-  }
-
-  switchModify = false;
-  switchModifyIdx = null;
-
-  updateData = () => {
-    const people = [];
-    firestore
-      .collection('address')
-      .get()
-      .then((docs) => {
-        docs.forEach((doc) => {
-          const person = doc.data();
-          people.push({
-            key: doc.id,
-            name: person.name,
-            telephone: person.telephone,
-            email: person.email,
-            address: person.address,
-          });
-        });
-        this.setState({
-          person: {
-            key: '',
-            name: '',
-            telephone: '',
-            email: '',
-            address: '',
-          },
-          people,
-        });
-      });
-  };
-
-  handleChange = (event) => {
-    let val = event.target.value;
-    const id = event.target.id;
-    const { person } = this.state;
-    console.log(id);
-    console.log(val);
-
-    this.setState({
-      person: {
-        key: id === 'key' ? val : person.key,
-        name: id === 'name' ? val : person.name,
-        telephone: id === 'telephone' ? val : person.telephone,
-        email: id === 'email' ? val : person.email,
-        address: id === 'address' ? val : person.address,
-      },
+  const handleModify = (record) => {
+    form.setFieldsValue({
+      name: record.name,
+      telephone: record.telephone,
+      email: record.email,
+      address: record.address,
     });
+    setEditingKey(record.key);
   };
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (this.switchModify) {
-      firestore
-        .collection('address')
-        .doc(this.switchModifyIdx)
-        .update(this.state.person)
-        .then(() => {
-          this.updateData();
-        });
-    } else {
-      firestore
-        .collection('address')
-        .add(this.state.person)
-        .then(() => {
-          this.updateData();
-        });
+  const handleDelete = async (id) => {
+    try {
+      await firestore.collection('address').doc(id).delete();
+      setPeople(people.filter(person => person.key !== id));
+      message.success('Deleted successfully');
+    } catch (error) {
+      console.error('Error deleting:', error);
+      message.error('Failed to delete');
     }
-
-    this.switchModify = false;
   };
 
-  handleTitle = (info) => {
-    let title;
-    switch (info) {
-      case 'id':
-        title = 'ID';
-        break;
-      case 'name':
-        title = 'Name';
-        break;
-      case 'telephone':
-        title = 'Telephone';
-        break;
-      case 'email':
-        title = 'Email';
-        break;
-      case 'address':
-        title = 'Address';
-        break;
-      default:
-        title = '';
-    }
-    return title;
+  const handleCancel = () => {
+    form.resetFields();
+    setEditingKey(null);
   };
 
-  handleModify = (id) => {
-    firestore
-      .collection('address')
-      .doc(id)
-      .get()
-      .then(() => {
-        const person = this.state.people.filter((person) => person.key === id)[0];
-        this.setState({
-          person,
-        });
-      });
-    this.switchModify = true;
-    this.switchModifyIdx = id;
-  };
+  const columns = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'Telephone',
+      dataIndex: 'telephone',
+      key: 'telephone',
+    },
+    {
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
+    },
+    {
+      title: 'Address',
+      dataIndex: 'address',
+      key: 'address',
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (_, record) => (
+        <Space size='middle'>
+          <Button onClick={() => handleModify(record)}>Modify</Button>
+          <Button onClick={() => handleDelete(record.key)}>Delete</Button>
+        </Space>
+      ),
+    },
+  ];
 
-  handleDelete = (id) => {
-    firestore
-      .collection('address')
-      .doc(id)
-      .delete()
-      .then(() => {
-        const people = this.state.people.filter((person) => person.key !== id);
-        this.setState({ people });
-      });
-  };
-
-  render() {
-    const { person, people } = this.state;
-    console.log(person);
-
-    const formLayout = 'horizontal';
-    const formItemLayout =
-      formLayout === 'horizontal'
-        ? {
-            labelCol: { span: 2 },
-            wrapperCol: { span: 21 },
-          }
-        : null;
-    const buttonItemLayout =
-      formLayout === 'horizontal'
-        ? {
-            wrapperCol: { span: 21, offset: 2 },
-          }
-        : null;
-
-    const { Column } = Table;
-
-    return (
-      <>
-        <Row justify='space-around' align='middle'>
-          <Col span={22}>
-            <Form layout={formLayout}>
-              {Object.keys(person).map((info, idx) =>
-                info === 'key' ? (
-                  ''
-                ) : (
-                  <Form.Item key={idx} label={this.handleTitle(info)} {...formItemLayout}>
-                    <Input id={info} value={this.state.person[info]} onChange={this.handleChange} />
-                  </Form.Item>
-                )
-              )}
-              <Form.Item {...buttonItemLayout}>
-                <Button type='primary' onClick={this.handleSubmit}>
-                  Submit
+  return (
+    <>
+      <Row justify='space-around' align='middle' style={{ marginTop: 20 }}>
+        <Col span={22}>
+          <Form 
+            form={form}
+            layout='horizontal' 
+            onFinish={handleSubmit}
+            labelCol={{ span: 2 }}
+            wrapperCol={{ span: 21 }}
+          >
+            <Form.Item 
+              label="Name" 
+              name="name" 
+              rules={[{ required: true, message: 'Please input name!' }]}
+            >
+              <Input />
+            </Form.Item>
+            
+            <Form.Item 
+              label="Telephone" 
+              name="telephone"
+              rules={[{ required: true, message: 'Please input telephone!' }]}
+            >
+              <Input />
+            </Form.Item>
+            
+            <Form.Item 
+              label="Email" 
+              name="email"
+              rules={[
+                { required: true, message: 'Please input email!' },
+                { type: 'email', message: 'Please input valid email!' }
+              ]}
+            >
+              <Input />
+            </Form.Item>
+            
+            <Form.Item 
+              label="Address" 
+              name="address"
+              rules={[{ required: true, message: 'Please input address!' }]}
+            >
+              <Input />
+            </Form.Item>
+            
+            <Form.Item wrapperCol={{ span: 21, offset: 2 }}>
+              <Space>
+                <Button type='primary' htmlType='submit'>
+                  {editingKey ? 'Update' : 'Submit'}
                 </Button>
-              </Form.Item>
-            </Form>
-          </Col>
-        </Row>
-        <Row justify='space-around' align='middle'>
-          <Col span={22}>
-            <Table dataSource={people}>
-              <Column title='Name' dataIndex='name' key='name' />
-              <Column title='Telephone' dataIndex='telephone' key='telephone' />
-              <Column title='Email' dataIndex='email' key='email' />
-              <Column title='Address' dataIndex='address' key='address' />
-              <Column
-                title='Action'
-                key='action'
-                render={(record) => (
-                  <Space size='middle'>
-                    <Button onClick={() => this.handleModify(record.key)}>Modify</Button>
-                    <Button onClick={() => this.handleDelete(record.key)}>Delete</Button>
-                  </Space>
+                {editingKey && (
+                  <Button onClick={handleCancel}>
+                    Cancel
+                  </Button>
                 )}
-              />
-            </Table>
-          </Col>
-        </Row>
-      </>
-    );
-  }
-}
+              </Space>
+            </Form.Item>
+          </Form>
+        </Col>
+      </Row>
+      
+      <Row justify='space-around' align='middle' style={{ marginTop: 20 }}>
+        <Col span={22}>
+          <Spin spinning={loading}>
+            <Table dataSource={people} columns={columns} />
+          </Spin>
+        </Col>
+      </Row>
+    </>
+  );
+};
 
 export default Enroll;
